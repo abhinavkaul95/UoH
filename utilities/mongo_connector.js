@@ -1,16 +1,26 @@
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
+const mongoose = require("mongoose");
 
 // MongoDB configurations
-const url = process.env.MONGODB_URL || 'mongodb://localhost:27017';
+const url = process.env.MONGODB_URL || 'mongodb://localhost:27017/';
 const dbName = process.env.MONGODB_DATABASE || 'uoh_health_care_centre';
-
-const find = function (db, collection, callback) {
-
+const dbPath = url + dbName
+mongoose.connect(dbPath, {
+    useNewUrlParser: true,
+});
+mongoose.connection.on("error", () => {
+    console.log("> error occurred from the database");
+}).once("open", () => {
+    console.log("> successfully opened the database");
+});
+module.exports = mongoose;
+/*const find = function (db, collection, callback) {
     // Find documents from the collection
     collection.find().toArray(function (err, result) {
-        assert.equal(err, null);
-        console.log("Found documents from", collection.namespace);
+        if (err) throw err;
+        console.log(result);
+        return result;
     });
 }
 
@@ -41,7 +51,7 @@ var mongo_op = function mongo_op(operation, coll, ins_data) {
 
         const db = client.db(dbName);
         const collection = db.collection(coll);
-        operation(db, collection, ins_data, function () {
+        res = operation(db, collection, ins_data, function () {
             client.close();
         });
     });
@@ -50,4 +60,4 @@ var mongo_op = function mongo_op(operation, coll, ins_data) {
 module.exports.mongo_op = mongo_op;
 module.exports.find = find;
 module.exports.insert_many = insert_many;
-module.exports.insert_one = insert_one;
+module.exports.insert_one = insert_one;*/

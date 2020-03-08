@@ -1,1 +1,2 @@
 .env #This file contains secrets. Do not push to github
+node_modules
